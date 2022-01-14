@@ -1,0 +1,54 @@
+--DROP statements to allow us to write all the DDL commands
+
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS properties CASCADE;
+DROP TABLE  IF EXISTS reservations CASCADE;
+DROP TABLE  IF EXISTS property_reviews CASCADE;
+
+--CREATE TABLE USERS
+CREATE TABLE users(
+  id SERIAL  PRIMARY KEY NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255),
+  password VARCHAR(255)
+);
+
+--CREATE TABLE PROPERTIES
+CREATE TABLE properties(
+  id SERIAL  PRIMARY KEY NOT NULL,
+  owner_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  title VARCHAR (255) NOT NULL,
+  description TEXT NOT NULL,
+  thumbnail_photo_url VARCHAR(255) NOT NULL,
+  cover_photo_url VARCHAR(255) NOT NULL,
+  cost_per_night INTEGER NOT NULL,
+  parking_spaces  INTEGER NOT NULL,
+  number_of_bathrooms INTEGER NOT NULL,
+  number_of_bedrooms INTEGER NOT NULL,
+  country VARCHAR(255),
+  street VARCHAR(255),
+  city VARCHAR(255),
+  province VARCHAR(255),
+  post_code VARCHAR(255),
+  active BOOLEAN NOT NULL
+
+);
+--CREATE TABLE RESERVATIONS
+CREATE TABLE reservations(
+id SERIAL PRIMARY KEY NOT NULL,
+start_data DATE NOT NULL,
+end_data DATE NOT NULL,
+property_id INTEGER NOT NULL REFERENCES properties(id) ON DELETE CASCADE,
+guest_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE
+);
+
+--CREATE TABLE PROPERTY_REVIEWS
+CREATE TABLE property_reviews(
+id SERIAL PRIMARY KEY NOT NULL,
+property_id INTEGER NOT NULL REFERENCES properties(id) ON DELETE CASCADE,
+guest_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+reservations_id INTEGER REFERENCES reservations(id) ON DELETE CASCADE,
+rating SMALLINT NOT NULL,
+message TEXT NOT NULL
+);
+
