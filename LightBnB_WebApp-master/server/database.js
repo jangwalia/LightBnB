@@ -2,6 +2,7 @@ const properties = require('./json/properties.json');
 const users = require('./json/users.json');
 //using node pg
 const {Pool} = require('pg');
+require('dotenv').config();
 //connecting to database
 const pool = new Pool({
   user: process.env.DB_USER,
@@ -76,7 +77,7 @@ const addUser =  function(user) {
  const values = [name,email,password];
  return pool.query(queryString,values)
  .then((res)=>{
-   console.log(res.rows);
+   
    return res.rows;
  })
  .catch((err)=>{
@@ -207,6 +208,7 @@ const getDollarAmount = (amount)=>{
     return res.rows;
   })
   .catch((err)=>{
+    console.log(err);
     return null;
   })
 
